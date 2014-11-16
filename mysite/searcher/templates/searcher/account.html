@@ -1,0 +1,141 @@
+{% load jstemplate %}
+
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css">
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/index.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+  	<script src="{{ STATIC_URL }}libs/mustache.js"></script>
+  	<script src="{{ STATIC_URL }}libs/chart.min.js"></script>
+  	<script type="text/javascript">
+  		Mustache.tags = ['[[', ']]'];
+
+
+    	function get_account(barcode){
+
+    		$.ajax({
+				dataType: "json",
+				url: "/account/" + barcode,
+				data: {},
+				envelope: {},
+
+				success: function(res) {
+
+					console.log(res);
+
+					// Have all available data
+					if ( res.status === 1 ) {
+
+	                    account_data = res.data;
+
+						console.log("found results")
+						console.log(res.data);
+						var template = $('#account-template').html();
+						var html = Mustache.to_html(template,res.data);
+						console.log(html);
+						$('#dynamic-area').html(html);
+
+						// fill in the graph data
+	                    //var ctx = $(".cpd_abundance").get(0).getContext("2d");
+	                    //var cpd_chart = new Chart(ctx).Bar(graph_data);
+
+					}
+
+
+					// No data at all for that fraction
+					else {
+						var template = $('#no-results-template').html();
+						console.log(template);
+						var html = Mustache.to_html(template);
+						console.log(html);
+						$('#dynamic-area').html(html);
+					}
+
+				}
+
+			});
+		}
+
+  	</script>
+
+	</head>
+
+
+<body>
+	<script id="account-template" type="text/template">
+		<div class = 'main-menu'>
+
+			<div class='welcome-message'> 
+
+
+				<div class='welcome'>
+					
+					Get Rich Bank
+				</div>
+
+				[[#user]]
+				<div class='account-info'>
+					Name: [[name]]
+				</div>
+
+				<div class='account-info'>
+					email: [[email]]
+				</div>
+
+				<div class='account-info'>
+					address: [[address]]
+				</div>
+
+				[[/user]]
+
+
+				[[#account]]
+				<div class='account-info'>
+					[[debit_credit]]
+				</div>
+
+				<div class='account-info'>
+					amount($): [[amount]]
+				</div>
+
+				[[/account]]
+
+			</div>
+
+
+		</div>
+
+	</div>
+
+	</script>
+
+	<div id='dynamic-area' class='dynamic-area'></div>
+
+
+
+ <script>
+    $(document).ready(function() {
+
+    	var raw_barcode;
+    	var path = document.location.pathname;
+
+    	console.log("Checking for url " + path);
+
+		if(path.match(/\/account/)) {
+			console.log("found the account");
+			account = path.match(/\/account(.*)/)[1];
+			raw_barcode = account.split('/');
+			raw_barcode = raw_barcode[1];
+
+			console.log("User barcode: " + raw_barcode);
+			get_account(raw_barcode);
+		}
+
+
+    });
+    
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+body {
+    font-family: helvetica;
+}
+
+body > div {
+    width: 1024px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    color: blue;
+}
+
+
+
+.image-container {
+    margin-bottom: 30px;
+    margin-top: -49px;
+}
+
+.image-container img {
+    width: 1024px;
+    height: 400px;
+}
+
+
+.welcome-message {
+    margin-top: 0px;
+    margin-left: -250px;
+    top: 20%;
+    left: 50%;
+    position: relative;
+    font-family: Helvetica;
+}
+
+.welcome {
+    font-size: 70px;
+    color: red;
+    font-weight: bold;
+    padding-bottom: 40px;
+    margin-top: 15px;
+}
+
+.welcome img {
+    max-height: 70px;
+}
+
+
+.account-info {
+    font-size: 30px;
+    margin-bottom: 15px;
+}
+
+
+
