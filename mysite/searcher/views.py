@@ -82,8 +82,77 @@ def account_lookup(request, barcode):
 
 		return HttpResponse(simplejson.dumps(envelope, cls=DecimalJSONEncoder), content_type='application/json')
 
-	else:
+	else:	
 		return render(request, 'searcher/account.html', {"barcode": barcode})
+
+def close_account_form(request):
+	if request.method == 'POST':
+		form = CloseAccountForm(request.POST)
+
+		print form
+
+		if form.is_valid():
+
+			print "Close account form is valid!"
+
+			account_holder = form.cleaned_data['account_holder']
+			debit_credit = form.cleaned_data['debit_credit']
+			reason = form.cleaned_data['reason']
+
+			account_close_request(account_holder, debit_credit, reason)
+
+			return HttpResponse("Account closure request sent to banker. Account will close within 1 business day.")
+	
+	else: 
+		form = CloseAccountForm()
+
+	return render(request, 'searcher/close-form.html', {'form': form})
+
+
+# Transfer Money form
+# Tony 11/17/2014
+def transfer_money_form(request):
+	if request.method == 'POST':
+		form = TransferMoneyForm(request.POST)
+
+		print form
+
+		if form.is_valid():
+
+			print "Transfer form is valid!"
+
+			account_holder = form.cleaned_data['account_holder']
+			debit_credit = form.cleaned_data['debit_credit']
+			reason = form.cleaned_data['reason']
+			amount_transfer = form.cleaned_data['amount_transfer']
+			routing_number= form.cleaned_data['routing_number']
+
+			user_giving = Account.objects.filter(barcode=account_holder).get()
+			user_receiving = Account.objects.filter(barcode=routing_number).get()
+
+			user_giving_new_amount = user_giving.amount - amount_transfer
+
+			# checking if the user who wants to transfer money has enough
+			if user_giving_new_amount < 0:
+				return HttpResponse("insufficient funds. Please place more money in account or transfer less")
+
+			user_receiving_new_amount = user_receiving.amount + amount_transfer
+
+			# updating new values after successful transfer
+			user_giving.amount = user_giving_new_amount
+			user_receiving.amount = user_receiving_new_amount
+
+			user_giving.save()
+			user_receiving.save()
+
+			return HttpResponse("Money successfully transferred")
+	
+	else: 
+		form = TransferMoneyForm()
+
+	return render(request, 'searcher/transfer-form.html', {'form': form})
+
+
 
 
 
