@@ -1,13 +1,15 @@
 {% load jstemplate %}
-
+{% load staticfiles %}
+<!DOCTYPE html>
 <html>
-<head>
-	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css">
-	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/index.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
-  	<script src="{{ STATIC_URL }}libs/mustache.js"></script>
-  	<script src="{{ STATIC_URL }}libs/chart.min.js"></script>
-  	<script type="text/javascript">
+
+
+<link href="{% static 'dist/css/bootstrap.css' %}" rel="stylesheet">
+<link href="{% static 'dist/css/Custom.css' %}" rel="stylesheet">
+<script src="https://code.jquery.com/jquery.js"></script>
+<script src="{% static 'dist/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'libs/mustache.js' %}"></script>
+<script type="text/javascript">
   		Mustache.tags = ['[[', ']]'];
 
 
@@ -35,6 +37,22 @@
 						console.log(html);
 						$('#dynamic-area').html(html);
 
+                        // Added by Huandari to display on available account
+                        var accountType = res.data.account[0].debit_credit;
+                        if (accountType == "credit")
+                        {
+                            $('#creditSummaryRow').show();
+                            $('#debitSummaryRow').hide();
+                            $('#totalSummaryRow').show();
+                        }
+                        else if (accountType == "debit")
+                        {
+                            $('#creditSummaryRow').hide();
+                            $('#debitSummaryRow').show();
+                            $('#totalSummaryRow').show();
+ 
+                        }
+
 						// fill in the graph data
 	                    //var ctx = $(".cpd_abundance").get(0).getContext("2d");
 	                    //var cpd_chart = new Chart(ctx).Bar(graph_data);
@@ -56,64 +74,92 @@
 			});
 		}
 
-  	</script>
+</script>
 
-	</head>
-
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Django Unchained Banking App</title>
+</head>
 
 <body>
-	<script id="account-template" type="text/template">
-		<div class = 'main-menu'>
 
-			<div class='welcome-message'> 
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-10"
+            style="padding-left:0px;padding-top:10px;padding-bottom:10px;">
+                <img 
+                src="{% static 'dist/images/logo.jpg' %}"
+                style = "height: 50px; width: 50px;"></img>
+                <h3 style="display:inline;padding-left: 5px;">Django Unchained</h3>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+            <div class="col-sm-8 col-md-8 col-md-offset-2">
+                <nav class="navbar navbar-default" role="navigation">
+                    <ul class="nav nav-justified navbar-nav">
+                        <li class="active"><a href="#">Summary</a></li>
+                        <li><a href="#">Transactions</a></li>
+                        <li><a href="#">Settings</a></li>
+                    </ul>
+                </nav>
+            </div>
+    </div>
+
+    <script id="account-template" type="text/template">
+            [[#user]]
+            <div class="row">
+                <div class="col-sm-8 col-md-8 col-md-offset-2">
+                    <h3>Welcome back, [[name]].</h3>
+                    <br>
+                    <h5>[[email]]</h5>
+                    <h5>[[address]]</h5>
+                    <br>
+                    <h4>Here is your account summary:</h4>
+                </div>
+            </div>
+            [[/user]]
+
+            <br>
+
+                [[#account]]
+                <div class="col-sm-8 col-md-8 col-md-offset-2">
+                    <div class="panel panel-default">
+                    <table class="table table-striped">
+                        <label id="testing" style="display:none;">[[debit_credit]]</label>
+                        <thead>
+                            <th>Accounts Summary</th>
+                        </thead>
+                        <tbody>
+                            <tr id="creditSummaryRow" style="border-radius: 15px;">
+                                <td>Summary of Credit account:</td>
+                                <td><div id="creditSummary">$[[amount]]</span></td>
+                            </tr>
+                            <tr id="debitSummaryRow">
+                                <td>Summary of Debit account:</td>
+                                <td><div id="debitSummary">$[[amount]]</span></td>
+                            </tr>
+                            <tr id="totalSummaryRow">
+                                <td>Total:</td>
+                                <td><div id="totalSummary">$[[amount]]</div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+                [[/account]]
+
+            </div>
+    </script>
+    <div id='dynamic-area' class='dynamic-area'></div>
 
 
-				<div class='welcome'>
-					
-					Get Rich Bank
-				</div>
+   
+</body>
 
-				[[#user]]
-				<div class='account-info'>
-					Name: [[name]]
-				</div>
-
-				<div class='account-info'>
-					email: [[email]]
-				</div>
-
-				<div class='account-info'>
-					address: [[address]]
-				</div>
-
-				[[/user]]
-
-
-				[[#account]]
-				<div class='account-info'>
-					[[debit_credit]]
-				</div>
-
-				<div class='account-info'>
-					amount($): [[amount]]
-				</div>
-
-				[[/account]]
-
-			</div>
-
-
-		</div>
-
-	</div>
-
-	</script>
-
-	<div id='dynamic-area' class='dynamic-area'></div>
-
-
-
- <script>
+<script>
     $(document).ready(function() {
 
     	var raw_barcode;
@@ -129,13 +175,12 @@
 
 			console.log("User barcode: " + raw_barcode);
 			get_account(raw_barcode);
+
 		}
 
 
     });
-    
+
 </script>
 
-
-</body>
 </html>

@@ -1,31 +1,164 @@
 {% block main %}
-	<div id="login">
-	<form class="form-horizontal" name="LoginForm" action="/login/" method="post">
-	{% csrf_token %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
 
-	{% if next %}
-	<input type="hidden" name="next" value="{{ next }}" />
-	{% endif %}
-	<div class="control-group">
-		<label class="control-label" for="username">Username</label>
-		<div class="controls">
-			<input type="text" id="username" name="username"  placeholder="Username">
-		</div>
-	</div>
+<link href="{% static 'dist/css/bootstrap.css' %}" rel="stylesheet">
+<link href="{% static 'dist/css/Custom.css' %}" rel="stylesheet">
+<script src="https://code.jquery.com/jquery.js"></script>
+<script src="{% static 'dist/js/bootstrap.min.js' %}"></script>
 
-	<div class="control-group">
-		<label class="control-label" for="password">Password</label>
-		<div class="controls">
-			<input type="password" name="password" id="password" placeholder="Password">
-		</div>
-	</div>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Django Unchained Banking App</title>
+</head>
 
-	<div class="control-group">
-		<div class="controls">
-			<button type="submit" class="btn">Login</button>
-		</div>
-	</div>
+<body>
 
-	</form>
-	</div>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-10"
+            style="padding-left:0px;padding-top:10px;padding-bottom:10px;">
+                <img 
+                src="{% static 'dist/images/logo.jpg' %}"
+                style = "height: 50px; width: 50px;"></img>
+                <h3 style="display:inline;padding-left: 5px;">Django Unchained</h3>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+            <div class="col-sm-8 col-md-8 col-md-offset-2">
+                <nav class="navbar navbar-default" role="navigation">
+                    <ul class="nav nav-justified navbar-nav">
+                        <li class="active"><a href="#">Home</a></li>
+                        <li><a href="#">Offers</a></li>
+                        <li><a href="#">Enroll</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-5 col-md-5 col-md-offset-2">
+            <div id="mainCarousel" data-interval="5000" data-ride="carousel" class="carousel slide">
+                <ol class="carousel-indicators">
+                    <li data-target="#mainCarousel" data-slide-to="0"
+                    class="active"></li>
+                    <li data-target="#mainCarousel" data-slide-to="1"></li>
+                    <li data-target="#mainCarousel" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="item active">
+                        <div class="carousel-caption">
+                        <h1>Picture One</h1>
+                        <p class="lead">This is some text.</p>
+                        </div>
+                    </div>
+
+                    <div class="item">
+                        <div class="carousel-caption">
+                        <h1>Picture Two</h1>
+                        <p class="lead">This is some other text.</p>
+                        </div>
+                    </div>
+
+                    <div class="item">
+                        <div class="carousel-caption">
+                        <h1>Picture Three</h1>
+                        <p class="lead">Last block of text.</p>
+                        </div>
+                    </div>
+                </div>
+                <a class="carousel-control left" href="#mainCarousel"
+                data-slide="prev"><span class="glyphicon
+                glyphicon-chevron-left"></span></a>
+                <a class="right carousel-control" href="#mainCarousel"
+                data-slide="next"><span class="glyphicon
+                glyphicon-chevron-right"></span></a>
+            </div>
+        </div>
+        
+        <div class="col-sm-3 col-md-3">
+             <h3>Welcome!</h3>
+             <br>
+
+             <form action="/login/" name="LoginForm" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" class="form-control" id="username"
+                    placeholder="Username">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control"
+                    id="password" name="password" placeholder="Password">
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+
+            <br>
+            <p>Need an account? <a href="#">Enroll now</a></p>
+        </div>
+    </div> <!-- row -->
+
+    <!-- An entire row/col structure for just a horizontal separator. Yup. -->
+    <div class="row" style="padding-top:30px;padding-bottom:30px;">
+        <div class="col-sm-4 col-md-4 col-md-offset-4">
+            <hr>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-8 col-md-8 col-md-offset-2">
+            <div class="col-md-4" style="text-align:center;">
+                <img class="img-circle"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                alt = "Generic placeholder image" style="width: 140px; height:
+                140px;">
+                <h2>Promotion</h2>
+                <p>Promotion text</p>
+            </div>
+            <div class="col-md-4" style="text-align:center;">
+                <img class="img-circle"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                alt = "Generic placeholder image" style="width: 140px; height:
+                140px;">
+
+                <h2>Second Promotion</h2>
+                <p>Text to promote the second promotion</p>
+            </div>
+            <div class="col-md-4" style="text-align:center;">
+                <img class="img-circle"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                alt = "Generic placeholder image" style="width: 140px; height:
+                140px;">
+
+                <h2>Third Promotion</h2>
+                <p>Text to promote the final promotion</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="padding-top:30px;padding-bottom:30px;">
+        <div class="col-sm-4 col-md-4 col-md-offset-4">
+            <hr>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-8 col-md-8 col-md-offset-2">
+            <center>This is the misc. section where we put anything else</center>
+        </div>
+    </div>
+    
+</body>
+
+</html>
+
 {% endblock %}

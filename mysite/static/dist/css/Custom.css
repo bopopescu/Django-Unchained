@@ -1,0 +1,16 @@
+.navbar-nav>li {
+    float: none;
+}
+
+.item {
+    background: #333;
+    text-align: center;
+    height: 300px !important;
+}
+
+.navbar {
+    -webkit-border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+    border-radius: 0 !important;
+}
+

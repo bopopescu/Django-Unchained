@@ -81,6 +81,7 @@ USE_TZ = True
 
 STATIC_ROOT = os.path.join(SITE_ROOT,'statics')
 MEDIA_ROOT = os.path.join(SITE_ROOT,'media')
+#STATIC_URL = '/static/'
 
 
 
@@ -88,18 +89,18 @@ MEDIA_ROOT = os.path.join(SITE_ROOT,'media')
 #AWS_SECRET_ACCESS_KEY='JBF4lipeEaF0P0B2C0Vpk61he9kFiHecDdJf8joh'
 #AWS_STORAGE_BUCKET_NAME='atlantis-smd'
 
-if os.environ.get('USE_S3') == 'off':
-    STATIC_URL = '/static/'
-    MEDIA_URL = '/media/'
+#if os.environ.get('USE_S3') == 'off':
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
 
-else:
-    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+#else:
+#    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+#    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+#    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 
 
-    DEFAULT_FILE_STORAGE = 'atlantis.s3utils.MediaRootS3BotoStorage'
-    STATICFILES_STORAGE = 'atlantis.s3utils.StaticRootS3BotoStorage'
+#    DEFAULT_FILE_STORAGE = 'atlantis.s3utils.MediaRootS3BotoStorage'
+#    STATICFILES_STORAGE = 'atlantis.s3utils.StaticRootS3BotoStorage'
 
 
 # Static files (CSS, JavaScript, Images)

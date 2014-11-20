@@ -52,7 +52,7 @@ def login_user(request):
 	return render_to_response('searcher/login.html', context_instance=RequestContext(request))
 
 
-@login_required(login_url='/login/')
+#@login_required(login_url='/login/')
 def account_lookup(request, barcode):
 	if request.is_ajax():
 		envelope = {}
