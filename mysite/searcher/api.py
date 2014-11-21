@@ -12,8 +12,7 @@ from tastypie.exceptions import BadRequest
 from rest_framework import serializers
 
 
-def account_close_request(account_holder, debit_credit, reason):
-	account_closing = CloseAccountRequest(account_holder=account_holder, debit_credit=debit_credit, reason=reason, date_requested=datetime.now())
-	account_closing.save()
+#def account_close_request(account_holder, debit_credit, reason):
+#	account_closing = CloseAccountRequest(account_holder=account_holder, debit_credit=debit_credit, reason=reason, date_requested=datetime.now())
+#	account_closing.save()
 
-	

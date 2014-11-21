@@ -12,16 +12,45 @@ class User(models.Model):
 	birthday = models.CharField(max_length=256, default=0)
 	email = models.CharField(max_length=256, default = 0)
 
-class Account(models.Model):
+class CheckingsAccount(models.Model):
 	user = models.ForeignKey(User)
-	debit_credit = models.CharField(max_length=256, default = 0)
 	amount = models.DecimalField(default = 0, max_digits=10, decimal_places=2)
 
-class Transaction(models.Model):
-	account = models.ForeignKey(Account)
+class SavingsAccount(models.Model):
+	user=models.ForeignKey(User)
+	amount = models.DecimalField(default = 0, max_digits=10, decimal_places=2)
+
+
+class TransactionBarcodeSeq(models.Model):
+	placeholder = models.CharField(max_length=8)
+
+class CheckingsTransaction(models.Model):
+	account = models.ForeignKey(CheckingsAccount)
 	date = models.DateTimeField(auto_now_add=True)
 	amount_moved = models.DecimalField(default=0, max_digits=10, decimal_places=2)
 	description = models.CharField(max_length=256, default=0)
+	barcode = models.CharField(max_length = 8)
+
+
+class SavingsTransaction(models.Model):
+	account = models.ForeignKey(SavingsAccount)
+	date = models.DateTimeField(auto_now_add=True)
+	amount_moved = models.DecimalField(default=0, max_digits=10, decimal_places=2)
+	description = models.CharField(max_length=256, default=0)
+	barcode = models.CharField(max_length = 8)
+
+
+@receiver(pre_save, sender=CheckingsTransaction)
+def get_checkings_transaction_barcode(sender, instance, *args, **kwargs):
+  if instance.barcode == '':                                                          
+    seq = TransactionBarcodeSeq.objects.create()                            
+    instance.barcode = "BCT{0:05d}".format(seq.id)
+
+@receiver(pre_save, sender=SavingsTransaction)
+def get_savings_transaction_barcode(sender, instance, *args, **kwargs):
+  if instance.barcode == '':                                                          
+    seq = TransactionBarcodeSeq.objects.create()                            
+    instance.barcode = "BST{0:05d}".format(seq.id)
 
 
 class CloseAccountRequest(models.Model):
