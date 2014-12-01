@@ -1,0 +1,117 @@
+{% load jstemplate %}
+
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css">
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/index.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+  	<script src="{{ STATIC_URL }}libs/mustache.js"></script>
+  	<script src="{{ STATIC_URL }}libs/chart.min.js"></script>
+  	<script type="text/javascript">
+  		Mustache.tags = ['[[', ']]'];
+
+
+    	function delete_account(){
+
+    		$.ajax({
+				url: "/close-account/",
+
+				success: function(res) {
+
+					console.log(res);
+					console.log("form to delete");
+
+					// Have all available data
+					if ( res.status === 1 ) {
+
+						var template = $('#account-template').html();
+						console.log(html);
+						console.log("delete time")
+						$('#dynamic-area').html(html);
+
+
+					}
+
+
+					// No data at all for that fraction
+					else {
+						var template = $('#no-results-template').html();
+						console.log(template);
+						var html = Mustache.to_html(template);
+						console.log(html);
+						$('#dynamic-area').html(html);
+					}
+
+				}
+
+			});
+		}
+
+  	</script>
+
+	</head>
+
+
+<body>
+		<div class='form-header'> Transfer Money</div>
+
+			<form action="{% url 'transfer_money' %}" method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+
+				<div class=''>
+				   <label for="id_account_holder">Account holder (routing number):</label>
+				   <input id="id_account_holder" type="text" class="" name="account_holder" />
+				</div>
+
+				<div class=''>
+				   <label for="id_debit_credit">Debit or Credit:</label>
+				   <input id="id_debit_credit" type="text" class="" name="debit_credit" />
+				</div>
+
+				<div class=''>
+				   <label for="id_amount_transfer">Amount:</label>
+				   <input id="id_amount_transfer" type="text" class="" name="amount_transfer" />
+				</div>				
+
+				<div class=''>
+				   <label for="id_reason">Add note:</label>
+				   <input id="id_reason" type="text" class="" name="reason" />
+				</div>
+
+				<div class=''>
+				   <label for="id_routing_number">Routing number (routing to?):</label>
+				   <input id="id_routing_number" type="text" class="" name="routing_number" />
+				</div>
+				
+				<div>
+					<input type="submit" class="submit-close" value="Request Account Closing"/>
+				</div>	
+
+
+			</form>
+
+	<div id='dynamic-area' class='dynamic-area'></div>
+
+
+
+ <script>
+    $(document).ready(function() {
+
+    	var path = document.location.pathname;
+
+    	console.log("Checking for url " + path);
+
+		if(path.match(/\/close-account/)) {
+			console.log("found the account");
+
+			delete_account()
+		}
+
+
+    });
+    
+</script>
+
+
+</body>
+</html>
