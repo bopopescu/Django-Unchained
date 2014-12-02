@@ -5,6 +5,11 @@ from datetime import datetime
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
+class User(models.Model):
+	name = models.CharField(max_length=256, default = 0)
+	address = models.CharField(max_length=256, default = 0)
+	birthday = models.CharField(max_length=256, default=0)
+	email = models.CharField(max_length=256, default = 0)
 
 class UserProfile(models.Model):
 	user = models.ForeignKey(User)
@@ -15,11 +20,6 @@ class CorporateUser(models.Model):
 
 class IndividualUser(models.Model):
 	profile = models.ForeignKey(UserProfile)
-
-	name = models.CharField(max_length=256, default = 0)
-	address = models.CharField(max_length=256, default = 0)
-	birthday = models.CharField(max_length=256, default=0)
-	email = models.CharField(max_length=256, default = 0)
 
 
 class CheckingsAccount(models.Model):

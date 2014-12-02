@@ -5,7 +5,7 @@ from django.conf.urls.static import static
 
 
 urlpatterns = patterns('',
-	url(r'^account/(?P<barcode>\S+)$', 'searcher.views.account_lookup'),
+	url(r'^account/(?P<username>\S+)$', 'searcher.views.account_lookup'),
 
 	url(r'^close-account/$', 'searcher.views.close_account_form', name='close_account'),
 

@@ -47,19 +47,20 @@ def login_user(request):
 		if user is not None:
 			if user.is_active:
 				login(request, user)
-				return HttpResponseRedirect('/account/100')
+				return HttpResponseRedirect('/account/' + username)
 	
 	return render_to_response('searcher/login.html', context_instance=RequestContext(request))
 
 
 @login_required(login_url='/login/')
-def account_lookup(request, barcode):
+def account_lookup(request, username):
 	if request.is_ajax():
 		envelope = {}
 
 		try:
-			user = list(User.objects.filter(barcode=barcode).values())
-			account = list(Account.objects.filter(barcode=barcode).values())
+			user = list(User.objects.filter(username=username).values())
+			checkings_account = list(user[0].CheckingsAccount.all())
+			savings_account = list(user[0].SavingsAccount.all())
 
 		except IndexError:
 			envelope = {
@@ -71,7 +72,8 @@ def account_lookup(request, barcode):
 
 			data = {
 				'user': user,
-				'account': account
+				'account': checkings_account,
+				'account1': savings_account,
 			}
 
 			envelope = {
@@ -83,7 +85,7 @@ def account_lookup(request, barcode):
 		return HttpResponse(simplejson.dumps(envelope, cls=DecimalJSONEncoder), content_type='application/json')
 
 	else:	
-		return render(request, 'searcher/account.html', {"barcode": barcode})
+		return render(request, 'searcher/account.html', {"username": username})
 
 def close_account_form(request):
 	if request.method == 'POST':
